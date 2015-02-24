@@ -320,7 +320,7 @@ get "#{repo_url}/config/locales/simple_form.ja.yml", 'config/locales/simple_form
 # ----------------------------------------------------------------
 generate 'active_record:session_migration'
 remove_file 'config/initializers/session_store.rb'
-create_file "#{repo_url}/config/initializers/session_store.rb", 'config/initializers/session_store.rb'
+get "#{repo_url}/config/initializers/session_store.rb", 'config/initializers/session_store.rb'
 
 
 # Database settings
