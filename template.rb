@@ -171,6 +171,8 @@ gem_group :test do
   gem 'timecop'
   # Capybaraでテスト中に現在のページをブラウザで開ける
   gem 'launchy'
+  # RSpecのWebアクセスのモックを作成してくれる
+  gem 'webmock', require: 'webmock/rspec'
 end
 
 # Bundle Install
@@ -251,12 +253,24 @@ end
 
 # RSpec setting
 # ----------------------------------------------------------------
-generate 'rspec:install'
 remove_dir 'test'
+generate 'rspec:install'
+
+remove_file 'spec/rails_helper.rb'
+get "#{repo_url}/spec/rails_helper.rb", 'spec/rails_helper.rb'
+
+remove_file 'spec/spec_helper.rb'
+get "#{repo_url}/spec/spec_helper.rb", 'spec/spec_helper.rb'
+
+empty_directory 'supec/support'
+get "#{repo_url}/spec/support/controller_macros.rb", 'spec/support/controller_macros.rb'
+get "#{repo_url}/spec/support/request_helpers.rb", 'spec/support/request_helpers.rb'
+
 if use_devise
-  uncomment_lines 'spec/spec_helper.rb', 'include Warden::Test::Helpers'
-  uncomment_lines 'spec/spec_helper.rb', 'config.include Devise::TestHelpers, type: :controller'
-  uncomment_lines 'spec/spec_helper.rb', 'config.include Devise::TestHelpers, type: :view'
+  uncomment_lines 'spec/rails_helper.rb', 'include Warden::Test::Helpers'
+  uncomment_lines 'spec/rails_helper.rb', 'config.include Devise::TestHelpers, type: :controller'
+  uncomment_lines 'spec/rails_helper.rb', 'config.extend ControllerMacros, :type => :controller'
+  uncomment_lines 'spec/rails_helper.rb', 'config.include RequestHelpers, :type => :request'
   uncomment_lines 'spec/spec_helper.rb', 'Warden.test_mode!'
   uncomment_lines 'spec/spec_helper.rb', 'Warden.test_reset!'
   generate 'devise:install'
