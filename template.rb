@@ -206,6 +206,7 @@ application do
 end
 get "#{repo_url}/config/locales/ja.yml", 'config/locales/ja.yml'
 
+run 'bundle binstub spring'
 
 # Create directories
 # ----------------------------------------------------------------
