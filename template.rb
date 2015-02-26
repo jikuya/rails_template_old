@@ -292,7 +292,7 @@ end
 # autodoc setting
 # ----------------------------------------------------------------
 empty_directory 'spec/autodoc/templates/'
-get "#{repo_url}/spec/autodoc/templates/document.md.erb", 'spec/autodoc/templates/document.md.erb'
+# get "#{repo_url}/spec/autodoc/templates/document.md.erb", 'spec/autodoc/templates/document.md.erb'
 
 
 # bullet settings
@@ -386,12 +386,15 @@ if use_devise
   get "#{repo_url}/config/locales/devise.ja.yml", 'config/locales/devise.ja.yml'
   # Optional Devise Setting
   if yes?('Need setting of Confirmable and Lockable?')
+    # Confirmable・Lockableの設定を追加
     remove_file 'config/initializers/devise.rb'
     get "#{repo_url}/config/initializers/devise.rb", 'config/initializers/devise.rb'
+    # Modelの設定を変更
     devise_model_name = devise_model.underscore
     insert_into_file "app/models/#{devise_model_name}.rb",
                       %(,\n         :confirmable, :lockable\n),
                       after: ":recoverable, :rememberable, :trackable, :validatable"
+    # Migrationファイルを変更
     migration_file = `ruby -e 'print Dir.glob("db/migrate/*devise_create_users*")[0]'`
     uncomment_lines migration_file, "t.string   :confirmation_token"
     uncomment_lines migration_file, "t.datetime :confirmed_at"
@@ -402,6 +405,12 @@ if use_devise
     uncomment_lines migration_file, "t.datetime :locked_at"
     uncomment_lines migration_file, "add_index :users, :confirmation_token,   unique: true"
     uncomment_lines migration_file, "add_index :users, :unlock_token,         unique: true"
+    # テストでメールを飛ぶ際の設定を追加
+    insert_into_file "config/environments/test.rb",
+                      %(\n  # Devise\n  config.action_mailer.default_url_options = { :host => 'example.com' }\n),
+                      after: "# config.action_view.raise_on_missing_translations = true\n"
+
+# config.action_view.raise_on_missing_translations = true
   end
   # Change path
   if yes?('Change the authorize path name? (Default is users)')
