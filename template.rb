@@ -262,7 +262,7 @@ get "#{repo_url}/spec/rails_helper.rb", 'spec/rails_helper.rb'
 remove_file 'spec/spec_helper.rb'
 get "#{repo_url}/spec/spec_helper.rb", 'spec/spec_helper.rb'
 
-empty_directory 'supec/support'
+empty_directory 'spec/support'
 get "#{repo_url}/spec/support/controller_macros.rb", 'spec/support/controller_macros.rb'
 get "#{repo_url}/spec/support/request_helpers.rb", 'spec/support/request_helpers.rb'
 
@@ -287,6 +287,12 @@ create_file '.rspec' do
 --format documentation
 EOS
 end
+
+
+# autodoc setting
+# ----------------------------------------------------------------
+empty_directory 'spec/autodoc/templates/'
+get "#{repo_url}/spec/autodoc/templates/document.md.erb", 'spec/autodoc/templates/document.md.erb'
 
 
 # bullet settings
