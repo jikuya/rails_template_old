@@ -237,8 +237,7 @@ create_file '.gitignore' do
 !/log/.keep
 /tmp
 
-# Gemlock.lockとvendor/bundleをgitの管理から外す
-/*.lock
+# vendor/bundleをgitの管理から外す
 /vendor/bundle
 EOS
 end
