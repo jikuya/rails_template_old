@@ -215,7 +215,7 @@ empty_directory_with_keep_file 'app/decorators'
 
 # Environment setting
 # ----------------------------------------------------------------
-comment_lines 'config/environments/production.rb', "config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?"
+comment_lines 'config/environments/production.rb', "  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?"
 environment 'config.serve_static_files = true', env: 'production'
 environment 'config.action_mailer.delivery_method = :letter_opener', env: 'development'
 
